@@ -1,4 +1,4 @@
-// Mock AI layer for the MVP. Later this can call Gemini, Claude, OpenAI, or Enter Pro.
+// Mock AI layer. Later this can call Gemini, Claude, OpenAI, or Enter Pro.
 
 async function generateFix(ticket, memory) {
   console.log('\n[AI] Building fix suggestion from issue + memory')
