@@ -28,11 +28,11 @@ ${memory.citations.join(', ')}`
 
   try {
     const model = genAI.getGenerativeModel({
-      model: 'gemini-1.5-flash'
+      model: 'gemini-2.5-flash'
     })
 
     const prompt = `
-You are helping with a quickathon project called Zero-Sync Debugger.
+You are helping with a quackathon project called Zero-Sync Debugger.
 
 A bug report came in and the agent already checked memory for similar past fixes.
 Use the bug report and memory context to suggest a practical fix.
