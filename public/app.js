@@ -42,6 +42,13 @@ runBtn.addEventListener('click', async () => {
         <h3>3. Suggested fix</h3>
         <pre>${data.fix}</pre>
       </div>
+
+      <div class="step">
+        <h3>4. New lesson saved</h3>
+        <p><strong>Status:</strong> ${data.savedLesson.saved ?'Saved': 'Not saved'}</p>
+        <p><strong>Memory ID:</strong> ${data.savedLesson.memoryId}</p>
+        <p>${data.savedLesson.summary}</p>
+      </div>
     `
   } catch (error) {
     loader.classList.add('hidden')

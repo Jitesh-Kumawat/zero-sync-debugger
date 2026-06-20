@@ -1,19 +1,21 @@
 const express = require('express');
-require('dotenv').config({ quiet: true })
+require('dotenv').config({ quiet: true });
 
-const { searchMemory } = require('./memory');
+const { searchMemory , saveMemory} = require('./memory');
 const { generateFix } = require('./aimodel');
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
-app.use(express.static('public'))
+app.use(express.static('public'));
 
 app.get('/', (req, res) => {
   res.send('Zero-Sync Debugger is running');
 })
 
+//Produck Webhook endpoint to receive new issues
 app.post('/webhook', async (req, res) => {
   const ticket = req.body;
 
@@ -24,16 +26,21 @@ app.post('/webhook', async (req, res) => {
   try {
     const memory = await searchMemory(ticket.title || ticket.description || 'Unknown issue');
     const fix = await generateFix(ticket, memory);
+    const savedLesson = await saveMemory(ticket, fix);
 
     console.log('\nFix suggestion created');
     console.log(fix);
 
+     console.log('\nNew lesson saved');
+     console.log(savedLesson);
+
     res.status(200).json({
-      message: 'Ticket analyzed and fix generated',
+      message: 'Ticket analyzed, fix generated and memory updated',
       received: true,
       ticket,
       memory,
-      fix
+      fix,
+      savedLesson
     })
   } catch (error) {
     console.error('Debugger flow failed:', error.message);

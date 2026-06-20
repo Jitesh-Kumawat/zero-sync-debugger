@@ -1,5 +1,6 @@
 // Mock memory layer for now. Later we will replace this with real Parcle API calls.
 
+//search Memory for past fixes related to the issue title
 async function searchMemory(issueTitle) {
   console.log(`\n[Memory] Searching past fixes for: "${issueTitle}"`)
 
@@ -15,4 +16,18 @@ async function searchMemory(issueTitle) {
   })
 }
 
-module.exports = { searchMemory }
+// save new memory lession for future reference
+async function saveMemory(ticket, fix){
+  console.log('\n[Memory] Saving new lession from this bug')
+
+  return new Promise((resolve) =>{
+    setTimeout(() => {
+      resolve({
+        saved: true,
+        memoryId: `memory-${Date.now()}`,
+        summary: `Saved debugging lesson for :${ticket.title}`
+  })
+},700)
+})
+}
+module.exports = { searchMemory, saveMemory }
