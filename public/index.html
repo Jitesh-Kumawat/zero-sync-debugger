@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zero-Sync Debugger</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+
+<body>
+  <main class="container">
+    <header>
+    
+      <h1>Zero-Sync Debugger</h1>
+      <p class="subtitle">
+        Bug report in, remembered fix out. A small agent that checks memory before suggesting code.
+      </p>
+    </header>
+
+    <section class="card">
+      <h2>Paste a bug</h2>
+
+      <label for="bugTitle">Bug title</label>
+      <input id="bugTitle" value="Authentication throwing 500 error" />
+
+      <label for="bugDesc">Bug description</label>
+      <textarea id="bugDesc" rows="4">When a user tries to login, the server crashes. Need an immediate fix.</textarea>
+
+      <button id="runBtn">Run Agent</button>
+    </section>
+
+    <section id="resultPanel" class="card hidden">
+      <h2>Agent run</h2>
+
+      <div id="loader" class="status hidden">
+        Checking old fixes and building a patch...
+      </div>
+
+      <div id="output"></div>
+    </section>
+
+    <p class="note">
+      Note: Parcle memory and AI response are mocked right now to prove the full flow.
+    </p>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>

@@ -1,5 +1,5 @@
 const express = require('express');
-require('dotenv').config();
+require('dotenv').config({ quiet: true })
 
 const { searchMemory } = require('./memory');
 const { generateFix } = require('./aimodel');
@@ -8,6 +8,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+app.use(express.static('public'))
 
 app.get('/', (req, res) => {
   res.send('Zero-Sync Debugger is running');

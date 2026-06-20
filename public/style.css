@@ -1,0 +1,121 @@
+body {
+  margin: 0;
+  background: #101114;
+  color: #eeeeee;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  width: min(900px, 92%);
+  margin: 0 auto;
+  padding: 36px 0;
+}
+
+header {
+  margin-bottom: 24px;
+}
+
+
+
+h1 {
+  margin: 0;
+  font-size: 40px;
+}
+
+.subtitle {
+  color: #b8b8b8;
+  max-width: 650px;
+  line-height: 1.5;
+}
+
+.card {
+  background: #181a20;
+  border: 1px solid #30333d;
+  border-radius: 12px;
+  padding: 22px;
+  margin-bottom: 20px;
+}
+
+h2 {
+  margin-top: 0;
+}
+
+label {
+  display: block;
+  margin: 14px 0 6px;
+  color: #c9c9c9;
+}
+
+input,
+textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  background: #0d0f13;
+  color: #eeeeee;
+  border: 1px solid #3b3f4a;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+textarea {
+  resize: vertical;
+}
+
+button {
+  margin-top: 18px;
+  padding: 12px 16px;
+  background: #4ade80;
+  color: #07130b;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #22c55e;
+}
+
+.status {
+  padding: 12px;
+  margin-bottom: 16px;
+  background: #2a2415;
+  color: #ffd166;
+  border-radius: 8px;
+}
+
+.step {
+  border-left: 4px solid #4ade80;
+  padding-left: 14px;
+  margin: 18px 0;
+}
+
+.step h3 {
+  margin: 0 0 8px;
+  color: #86efac;
+}
+
+.step p {
+  margin: 6px 0;
+  line-height: 1.5;
+}
+
+pre {
+  white-space: pre-wrap;
+  background: #0d0f13;
+  color: #d1fae5;
+  border: 1px solid #30333d;
+  border-radius: 8px;
+  padding: 14px;
+  line-height: 1.5;
+}
+
+.note {
+  color: #888;
+  font-size: 14px;
+}
+
+.hidden {
+  display: none;
+}
