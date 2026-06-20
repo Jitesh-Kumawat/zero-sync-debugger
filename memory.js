@@ -17,17 +17,84 @@ async function searchMemory(issueTitle) {
 }
 
 // save new memory lession for future reference
-async function saveMemory(ticket, fix){
-  console.log('\n[Memory] Saving new lession from this bug')
+async function saveMemory(ticket, fix) {
+  console.log('\n[Memory] Saving new debugging lesson to Parcle')
 
-  return new Promise((resolve) =>{
-    setTimeout(() => {
-      resolve({
-        saved: true,
-        memoryId: `memory-${Date.now()}`,
-        summary: `Saved debugging lesson for :${ticket.title}`
-  })
-},700)
-})
+  const apiKey = process.env.PARCLE_API_KEY
+  const userId = process.env.PARCLE_USER_ID || 'zero-sync-debugger'
+
+  if (!apiKey) {
+    return {
+      saved: true,
+      memoryId: `mock-memory-${Date.now()}`,
+      summary: `Saved debugging lesson locally for: ${ticket.title}`
+    }
+  }
+
+  try {
+    const userResponse = await fetch('https://api.parcle.ai/v1/users', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        user_id: userId,
+        name: 'Zero-Sync Debugger',
+        timezone: 'Asia/Kolkata'
+      })
+    })
+
+    if (!userResponse.ok) {
+      const errorText = await userResponse.text()
+      throw new Error(`Parcle user setup failed ${userResponse.status}: ${errorText}`)
+    }
+
+    const response = await fetch('https://api.parcle.ai/v1/memories/ingest_dialog', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        user_id: userId,
+        messages: [
+          {
+            role: 'user',
+            content: `Bug: ${ticket.title}\nDescription: ${ticket.description}`
+          },
+          {
+            role: 'assistant',
+            content: `Generated fix:\n${fix}`
+          }
+        ],
+        tag: {
+          app: 'zero-sync-debugger',
+          type: 'bug_fix'
+        }
+      })
+    })
+
+    if (!response.ok) {
+      const errorText = await response.text()
+      throw new Error(`Parcle save failed ${response.status}: ${errorText}`)
+    }
+
+    const data = await response.json()
+
+    return {
+      saved: true,
+      memoryId: data.event_id || data.session_id || 'parcle-memory',
+      summary: `Saved debugging lesson to Parcle for: ${ticket.title}`
+    }
+  } catch (error) {
+    console.error('[Memory] Parcle save failed:', error.message)
+
+    return {
+      saved: false,
+      memoryId: null,
+      summary: 'Could not save lesson to Parcle'
+    }
+  }
 }
 module.exports = { searchMemory, saveMemory }
