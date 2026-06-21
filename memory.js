@@ -1,13 +1,13 @@
-require('dotenv').config({ quiet: true })
+require('dotenv').config({ quiet: true });
 
-const PARCLE_BASE_URL = 'https://api.parcle.ai/v1'
-const DEFAULT_USER_ID = 'zero-sync-debugger'
+const PARCLE_BASE_URL = 'https://api.parcle.ai/v1' ;
+const DEFAULT_USER_ID = 'zero-sync-debugger' ;
 
 async function searchMemory(issueTitle) {
-  console.log(`\n[Memory] Searching Parcle for: "${issueTitle}"`)
+  console.log(`\n[Memory] Searching Parcle for: "${issueTitle}"`);
 
-  const apiKey = process.env.PARCLE_API_KEY
-  const userId = process.env.PARCLE_USER_ID || DEFAULT_USER_ID
+  const apiKey = process.env.PARCLE_API_KEY ;
+  const userId = process.env.PARCLE_USER_ID || DEFAULT_USER_ID ;
 
   if (!apiKey) {
     return fallbackMemory()
@@ -32,11 +32,11 @@ async function searchMemory(issueTitle) {
 
     if (!response.ok) {
       const errorText = await response.text()
-      throw new Error(`Parcle search failed ${response.status}: ${errorText}`)
+      throw new Error(`Parcle search failed ${response.status}: ${errorText}`);
     }
 
-    const streamText = await response.text()
-    const result = parseParcleSearchStream(streamText)
+    const streamText = await response.text();
+    const result = parseParcleSearchStream(streamText);
 
     if (!result) {
       return {
@@ -52,16 +52,16 @@ async function searchMemory(issueTitle) {
       citations: result.citations ? result.citations.map((item) => item.id) : []
     }
   } catch (error) {
-    console.error('[Memory] Parcle search failed:', error.message)
-    return fallbackMemory()
+    console.error('[Memory] Parcle search failed:', error.message);
+    return fallbackMemory();
   }
 }
 
 async function saveMemory(ticket, fix) {
-  console.log('\n[Memory] Saving debugging lesson to Parcle')
+  console.log('\n[Memory] Saving debugging lesson to Parcle');
 
-  const apiKey = process.env.PARCLE_API_KEY
-  const userId = process.env.PARCLE_USER_ID || DEFAULT_USER_ID
+  const apiKey = process.env.PARCLE_API_KEY ;
+  const userId = process.env.PARCLE_USER_ID || DEFAULT_USER_ID ;
 
   if (!apiKey) {
     return {
@@ -72,7 +72,7 @@ async function saveMemory(ticket, fix) {
   }
 
   try {
-    await ensureUser(apiKey, userId)
+    await ensureUser(apiKey, userId);
 
     const response = await fetch(`${PARCLE_BASE_URL}/memories/ingest_dialog`, {
       method: 'POST',
@@ -100,11 +100,11 @@ async function saveMemory(ticket, fix) {
     })
 
     if (!response.ok) {
-      const errorText = await response.text()
-      throw new Error(`Parcle save failed ${response.status}: ${errorText}`)
+      const errorText = await response.text();
+      throw new Error(`Parcle save failed ${response.status}: ${errorText}`);
     }
 
-    const data = await response.json()
+    const data = await response.json();
 
     return {
       saved: true,
@@ -112,7 +112,7 @@ async function saveMemory(ticket, fix) {
       summary: `Saved debugging lesson to Parcle for: ${ticket.title}`
     }
   } catch (error) {
-    console.error('[Memory] Parcle save failed:', error.message)
+    console.error('[Memory] Parcle save failed:', error.message);
 
     return {
       saved: false,
@@ -137,17 +137,17 @@ async function ensureUser(apiKey, userId) {
   })
 
   if (!response.ok) {
-    const errorText = await response.text()
-    throw new Error(`Parcle user setup failed ${response.status}: ${errorText}`)
+    const errorText = await response.text();
+    throw new Error(`Parcle user setup failed ${response.status}: ${errorText}`);
   }
 }
 
 function parseParcleSearchStream(streamText) {
-  const events = streamText.split('\n\n')
+  const events = streamText.split('\n\n');
 
   for (const event of events) {
-    const lines = event.split('\n')
-    const eventName = lines
+    const lines = event.split('\n');
+    const eventName = lines 
       .find((line) => line.startsWith('event:'))
       ?.replace('event:', '')
       .trim()
@@ -165,13 +165,13 @@ function parseParcleSearchStream(streamText) {
     }
 
     try {
-      return JSON.parse(dataLines.join('\n'))
+      return JSON.parse(dataLines.join('\n'));
     } catch (error) {
-      return null
+      return null ;
     }
   }
 
-  return null
+  return null ;
 }
 
 function fallbackMemory() {

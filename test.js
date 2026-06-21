@@ -1,4 +1,4 @@
-//this file is testing of sendinf fake bug
+//this file is testing of sending fake bug
 
 const ticketData= {
     title: 'Authentication throwing 500 error',

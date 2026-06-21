@@ -67,9 +67,9 @@ Memory used:
 `
 
     const result = await model.generateContent(prompt);
-    const response = await result.response
+    const response = await result.response ;
 
-    return response.text().trim()
+    return response.text().trim();
   } catch (error) {
     console.error('[AI] Gemini failed:', error.message);
 
