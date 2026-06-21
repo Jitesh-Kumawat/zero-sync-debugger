@@ -1,11 +1,13 @@
 const express = require('express');
+const cors = require('cors');
 require('dotenv').config({ quiet: true });
 
-const { searchMemory , saveMemory} = require('./memory');
+const { searchMemory, saveMemory } = require('./memory');
 const { generateFix } = require('./aimodel');
 
 
 const app = express();
+app.use(cors());
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
@@ -31,8 +33,8 @@ app.post('/webhook', async (req, res) => {
     console.log('\nFix suggestion created');
     console.log(fix);
 
-     console.log('\nNew lesson saved');
-     console.log(savedLesson);
+    console.log('\nNew lesson saved');
+    console.log(savedLesson);
 
     res.status(200).json({
       message: 'Ticket analyzed, fix generated and memory updated',
