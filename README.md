@@ -1,9 +1,16 @@
 # Zero-Sync Debugger
 
-Zero-Sync Debugger is a small debugging agent.
+Zero-Sync Debugger is a small debugging agent .
 
 The idea is simple: when a bug report comes in, the agent checks previous debugging memory before suggesting a fix. Most coding agents start from zero every time, so this project uses Parcle as a memory layer for old fixes and decisions.
 
+
+## Live Demo
+
+- Enter Pro app: https://79b8ba9f20b649d0b07c4862024945ca.prod.enterapp.pro
+- Demo video: https://youtu.be/vKtEUrgh5wM
+
+The frontend is published with Enter Pro. The backend is deployed separately so Parcle and Gemini API keys can stay secure as environment variables.
 
 ## What It Does
 
@@ -12,7 +19,7 @@ The idea is simple: when a bug report comes in, the agent checks previous debugg
 - Sends the bug report and memory context to Gemini.
 - Generates a root cause, fix plan, and suggested patch.
 - Saves the new bug/fix lesson back into Parcle.
-- Shows the full trace in a simple dashboard.
+- Shows the full trace in the dashboard.
 
 ## Why This Matters
 
@@ -45,6 +52,8 @@ The backend then runs this flow:
 - Vanilla HTML, CSS, JavaScript
 - Parcle Memory API
 - Google Gemini API
+- Enter Pro
+- Render
 - dotenv
 
 ## Why This Stack
@@ -52,8 +61,9 @@ The backend then runs this flow:
 - **Node.js + Express**: small backend server and webhook route.
 - **Parcle Memory API**: persistent memory for previous fixes and new debugging lessons.
 - **Gemini API**: generates the fix using the bug report plus memory context.
-- **Vanilla HTML/CSS/JS**: simple dashboard frontend setup.
-- **dotenv**: keeps API keys outside the codebase.
+- **Enter Pro**: published frontend/share link for the hackathon demo.
+- **Render**: hosts the backend securely with environment variables.
+- **dotenv**: keeps local API keys outside the codebase.
 
 ## Project Structure
 
@@ -64,6 +74,7 @@ zero-sync-debugger/
 ├── aimodel.js
 ├── test.js
 ├── package.json
+├── package-lock.json
 ├── public/
 │   ├── index.html
 │   ├── style.css
@@ -112,30 +123,50 @@ You can also test the backend without the dashboard:
 node test.js
 ```
 
+## Deployment
+
+The project uses a split deployment:
+
+```text
+Enter Pro frontend -> Render backend -> Parcle + Gemini
+```
+
+- Enter Pro hosts the live dashboard.
+- Render runs the Node.js/Express backend.
+- Parcle and Gemini keys are stored only on the backend.
+
+This keeps the frontend shareable while keeping API keys private.
+
 ## Sponsor Usage
 
 ### Parcle
 
 Parcle is used as the persistent memory layer.
 
-The app searches Parcle for previous debugging lessons before generating a fix, then saves the final bug/fix result back into Parcle so future runs can reuse it.
+The backend searches Parcle for previous debugging lessons before generating a fix. After Gemini generates a new fix, the app saves the bug and fix back into Parcle so future runs can reuse that lesson.
 
 ### Enter Pro
 
-Enter Pro is part of the track setup and is the intended build/deployment environment for the project demo.
+Enter Pro is used to publish the live frontend/demo link for the project. The dashboard calls the deployed backend, which handles Parcle and Gemini securely.
+
+### Gemini
+
+Gemini is used as the reasoning layer. It receives the current bug report plus the Parcle memory context and generates a root cause, fix plan, and suggested patch.
 
 ## Demo Flow
 
 Example bug:
 
 ```text
-Authentication throwing 500 error
+Dashboard blank after login
 ```
 
 The agent:
 
-1. Searches Parcle for previous auth/JWT debugging lessons.
-2. Uses Gemini to generate a fix.
-3. Suggests replacing a hardcoded JWT secret with `process.env.JWT_SECRET`.
+1. Searches Parcle for previous dashboard/blank-page debugging lessons.
+2. Retrieves relevant memory with confidence and citations.
+3. Uses Gemini to generate a context-aware fix.
 4. Saves the new debugging lesson back into Parcle.
+
+A key demo moment is that after a bug is saved once, a similar bug later gets a stronger memory match. This shows the agent is learning from past fixes instead of starting from zero every time.
 

@@ -13,6 +13,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.static('public'));
 
+
 app.get('/', (req, res) => {
   res.send('Zero-Sync Debugger is running');
 })
@@ -21,7 +22,7 @@ app.get('/', (req, res) => {
 app.post('/webhook', async (req, res) => {
   const ticket = req.body;
 
-  console.log('\nNew Produck issue received');
+  console.log('\nNew issue received');
   console.log('Title:', ticket.title || 'Untitled issue');
   console.log('Description:', ticket.description || 'No description provided');
 

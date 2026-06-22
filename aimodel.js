@@ -8,22 +8,22 @@ async function generateFix(ticket, memory) {
 
   if (!process.env.GEMINI_API_KEY) {
     return `Root cause:
-The auth flow is probably failing because the JWT secret is hardcoded or missing in the runtime environment.
+            The auth flow is probably failing because the JWT secret is hardcoded or missing in the runtime environment.
 
-Fix plan:
-1. Move the JWT secret into an environment variable.
-2. Add a fallback check so the server fails clearly if JWT_SECRET is missing.
-3. Restart the server after updating the .env file.
+            Fix plan:
+            1. Move the JWT secret into an environment variable.
+            2. Add a fallback check so the server fails clearly if JWT_SECRET is missing.
+            3. Restart the server after updating the .env file.
 
-Suggested patch:
-- const JWT_SECRET = "super_secret_key_123"
-+ const JWT_SECRET = process.env.JWT_SECRET
+            Suggested patch:
+            - const JWT_SECRET = "super_secret_key_123"
+            + const JWT_SECRET = process.env.JWT_SECRET
 
-Memory used:
-${memory.context}
+            Memory used:
+            ${memory.context}
 
-References:
-${memory.citations.join(', ')}`
+            References:
+            ${memory.citations.join(', ')}`
   }
 
   try {
@@ -32,42 +32,42 @@ ${memory.citations.join(', ')}`
     })
 
     const prompt = `
-You are helping with a quackathon project called Zero-Sync Debugger.
+    You are helping with a quackathon project called Zero-Sync Debugger.
 
-A bug report came in and the agent already checked memory for similar past fixes.
-Use the bug report and memory context to suggest a practical fix.
+    A bug report came in and the agent already checked memory for similar past fixes.
+    Use the bug report and memory context to suggest a practical fix.
 
-Bug title:
-${ticket.title || 'Unknown issue'}
+    Bug title:
+    ${ticket.title || 'Unknown issue'}
 
-Bug description:
-${ticket.description || 'No description provided'}
+    Bug description:
+    ${ticket.description || 'No description provided'}
 
-Memory context:
-${memory.context || 'No memory found'}
+    Memory context:
+    ${memory.context || 'No memory found'}
 
-Memory citations:
-${memory.citations?.join(', ') || 'No citations'}
+    Memory citations:
+    ${memory.citations?.join(', ') || 'No citations'}
 
-Return the answer in this exact format:
+    Return the answer in this exact format:
 
-Root cause:
-[short explanation]
+    Root cause:
+    [short explanation]
 
-Fix plan:
-1. [first step]
-2. [second step]
-3. [third step]
+    Fix plan:
+    1. [first step]
+    2. [second step]
+    3. [third step]
 
-Suggested patch:
-[small code patch or config change]
+    Suggested patch:
+    [small code patch or config change]
 
-Memory used:
-[briefly mention which memory helped]
+    Memory used:
+  [briefly mention which memory helped]
 `
 
     const result = await model.generateContent(prompt);
-    const response = await result.response ;
+    const response = await result.response;
 
     return response.text().trim();
   } catch (error) {
